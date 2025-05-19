@@ -4,10 +4,10 @@ from collections import defaultdict
 
 app = Flask(__name__)
 
-# In-memory storage for notifications
+# In-memory storage for notifications(mainly stores for the notification purposes)
 notifications_db = defaultdict(list)
 
-# Supported notification types
+# Supported notification
 NOTIFICATION_TYPES = {"email", "sms", "in-app"}
 
 @app.route('/notifications', methods=['POST'])
@@ -28,14 +28,11 @@ def send_notification():
         "id": str(uuid4()),
         "type": notification_type,
         "message": message,
-        "status": "pending"  # you could update status later (e.g., sent, failed)
+        "status": "pending"  
     }
 
-    # Save notification to "DB"
-    notifications_db[user_id].append(notification)
 
-    # Here you would add logic to send the notification asynchronously (queue etc.)
-    # For now, we just simulate sending by setting status to sent
+    notifications_db[user_id].append(notification)
     notification["status"] = "sent"
 
     return jsonify({"message": "Notification sent", "notification": notification}), 201
